@@ -6,7 +6,7 @@ This respository (hecrasio) demonstrates how to read information from the HEC-RA
 
 
 ## Data
-For using the QA/QC notebook in examining HEC-RAS data, the HEC-RAS HDF should be uploaded to the folder 'data/processed'.
+For using the QA/QC notebook in examining HEC-RAS data, the HEC-RAS .hdf file should be uploaded to the folder 'data/processed'.
 
 ## Project organization
 
