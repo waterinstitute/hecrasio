@@ -1,4 +1,4 @@
 # Data Processing Code
 
-Here the data processing consists of the code for analyzing the hec-ras input output in the hecrasio folder.
+Here the data processing code analyzes the hec-ras inputs and outputs. This code is found in the hecrasio folder.
 
