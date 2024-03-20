@@ -1,4 +1,4 @@
-# Documentation for the Data Processing
+# Data Processing Code
 
-Here the data processing consists of the code for the hec-ras input output in the hecrasio folder.
+Here the data processing consists of the code for analyzing the hec-ras input output in the hecrasio folder.
 
