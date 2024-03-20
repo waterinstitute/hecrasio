@@ -1,30 +1,15 @@
-# Project Name
-
-## Primary scientists and contributors
-- 
-
-## Project objective
+# HECRASIO (HEC-RAS Input Output)
 
 
-## Project scope
+## Description
+The respository hecrasio is a collection of tools to read results from HEC-RAS providing quality assurance and control (QA/QC) of one or more notebooks. HEC-RAS input and output is processed and displayed by running the [QA/QC - LWI](https://github.com/user/repo/blob/branch/other_file.md) Jupyter notebook. Running the notebook should be done within a Docker container created with the [Dockerfile-hecrasio](https://github.com/user/repo/blob/branch/other_file.md). The Docker container is created by running the [docker-compose](https://github.com/user/repo/blob/branch/other_file.md) file. Once the docker container is runnning, the Jupyter notebook [QA/QC - LWI](https://github.com/user/repo/blob/branch/other_file.md) is accessed by going to [localhost:8889](ocalhost:8889/lab/tree/jovyan/app/notebooks) and entering the password 'LWI'.
 
 
-### Metrics for success
-
-
-### Resources
-
-
-### Data
-
-- Source 1...
-- Satellite...
-
-
+## Data
+For using the QA/QC notebook in examining HEC-RAS data, the HEC-RAS HDF should be uploaded to the data/external folder.
 
 ## Project organization
 
-    ├── LICENSE
     ├── Makefile           <- Makefile with commands like `make data` or `make train`
     ├── README.md          <- The top-level README for developers using this project.
     ├── config             <- Configuration files for the project.
@@ -75,5 +60,4 @@
     │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
     │       └── visualize.py
     │
-    └── 
-
+    └── LICENSE

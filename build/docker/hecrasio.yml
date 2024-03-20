@@ -1,0 +1,17 @@
+name: prj-lmr-scistack
+channel_priority: strict
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - gdal
+  - geopandas
+  - rasterio
+  - h5py
+  - pip
+  - ipykernel
+  - pip:
+    - scrapbook
+    - papermill
+    - matplotlib
+    - windrose

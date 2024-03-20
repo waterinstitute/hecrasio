@@ -8,59 +8,8 @@ Docker-compose is a tool for defining and running multi-container Docker applica
 
 Before getting started, for windows install Docker desktop and the windows sublinux system version 2 (for Windows 10 only), and for linux, install docker and docker-compose; see the Appendix at the end of this document.
 
-## STEP 1 - Creating the Dockerfile
 
-(If the Dockerfile already exists, skip this step)
-
-Create a Dockerfile, if one doesn't exist. Typically, start the Dockerfile from a base image. A decent starting image, as well as templates for the Dockerfile in general, may be found at
-
-<https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html>
-
-Dockerfiles often start from images that are avaible in publicly open registries such as Docker Hub (<https://hub.docker.com/search?type=image>); however, many time an image may start with an image stored in a private registry.
-
-### Logging into Private Registries
-
-Note that using the develop service requires that one login into our private container registry (see Appendix at the end of this readme file).
-
-### Installing pip and conda dependencies
-
-For pip dependencies, the approprietely Docker files script is
-
-```
-COPY --chown=${NB_UID}:${NB_GID} docker/requirements_pip_develop.txt /tmp/
-
-RUN pip install --requirement /tmp/requirements_pip_develop.txt && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
-```
-
-while for conda dependencies, packages are installed via
-
-```
-COPY --chown=${NB_UID}:${NB_GID} docker/requirements_conda_develop.txt /tmp/
-
-RUN conda install --yes --file /tmp/requirements_conda_develop.txt && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
-
-```
-
-Note that pip dependencies may be installed by bypassing ssl certification with the script
-
-`RUN pip install package_name --trusted-host pypi.org --trusted-host files.pythonhosted.org`
-
-### Project Specifics
-
-For this project, the container is built upon the jupyter/scipy-notebook image, which contains
-
-* Everything in jupyter/minimal-notebook and its ancestor images
-* dask, pandas, numexpr, matplotlib, scipy, seaborn, scikit-learn, scikit-image, sympy, cython, patsy, statsmodel, cloudpickle, dill, numba, bokeh, sqlalchemy, hdf5, vincent, beautifulsoup, protobuf, xlrd, bottleneck, and pytables packages
-* ipywidgets and ipympl for interactive visualizations and plots in Python notebooks
-* Facets for visualizing machine learning datasets.
-
-In addition, this container is loaded with the latest version of GRASS GIS.
-
-## STEP 2 - Building the Container with Docker Compose
+## Building the Container with Docker Compose
 
 (If the Dockerfile has already been tested skip this step and proceed to Step 4)
 
@@ -104,9 +53,8 @@ The variable `my-service-name` is found in the docker compose file as the next l
 
 Once docker-compose has completed the command line (or bash) will display a link with an access token for accesing the Jupyter notebook. Depending on the installations, other services (such as nteract <https://nteract.io/>) may be available. Generally, using a web browser, a notebook environment is acccessed via one of the following links
 
-* Jupyter Lab -- <http://localhost:8080/lab>
-* Jupyter Notebook -- <http://localhost:8080>
-* Nteract Notebook -- <http://localhost:8080/nteract>
+* Jupyter Lab -- <http://localhost:8889/lab>
+* Jupyter Notebook -- <http://localhost:8889>
 
 Note that the port (here given as 8080) depends on the settings in the dockerfile. If the connection through the web browser fails, please check the port setting in the docker-comopose.yml file. For more information on Nteract, please refer to <https://nteract.io/>. Nteract was developed by Netflix <https://netflixtechblog.com/notebook-innovation-591ee3221233>
 
@@ -128,20 +76,6 @@ This project consists of two services:
 
 Initially use the 'test' service to check the Dockerfile guild. Thereafter, use the 'develop' service to pull the stable image (with a few packages installations that aid development). Since the 'develop' service starts from an image in the  container registry, it requires that one login into the registry following the directions in the Appendix.
 
-## Step 3 - Store the Container in the  Registry
-
-Once the main Dockerfile has been tested and verififed (e.g., using the 'test' service of docker-compose), the container typically should be pushed to a private registry, so the environment may be used at scale or for further development of script. The Docker image is pushed to the container registry by initiating the pipeline (called 'Docker Image for ACR') to create the Docker image for the project. The pipeline does the following steps:
-
-* Interprets the Dockerfile to create an Image with Grass GIS, as well as with the conda and pip dependencies listed in the text files.
-* Pushes the newly built image to the project Container registry with the repository name of 'grass-gis-processing' with a tag.
-
-The best practice is to tag the image with the date (e.g., 2021-01-13 for January 13th 2021). Then test the image in the regsitry to make sure it doesn't break existing processes (typically with a unit test). Once all tests are passed, push the container to the registry with the tag 'latest', which is the tag referenced by ongoing processes.
-
-## Step 4 - Pull the Docker Image from the  Registry
-
-(If Dockerfile.develop already exists, just execute this file with Docker-compose for this step)
-
-For development purposes, create a second Dockerfile (e.g., Dockerfile.develop). This Dockerfile should start from the image pushed to the  container registry (i.e., the image based on the original Dockerfile). For this new Dockerfile (for development), install pip and conda dependencies (following Step 1) that aid development, but which are not necessary for running the process at scale. Initiate this new development Dockerfile, by creating an additional service in the docker-compose file (e.g., called 'develop'). Run this new service following the docker-compose guidance given in Step 2.
 
 # Appendix
 
@@ -153,23 +87,6 @@ For a windows environment, Docker requires the following software:
 * Windows sub-Linux SYstem - <https://docs.microsoft.com/en-us/windows/wsl/install-win10>
 
 Note that this only requires completely steps up to and including Step 5. No need to install a Linux distribution.
-
-## Logging into an Container Registry
-
-Unless using a publicly available image (e.g., Docker Hub), one needs to login into private container registries. To login into a container register, open the command line or bash and use the following script:
-
-`docker login some-registry-login-server-address.io`.
-
-When using bash, the `docker login` command may need to be `sudo docker login`. After initiating the docker login, the command line will prompt for the username and password to the container registery, i.e.,
-
-```
-$ docker login some-registry-login-server-address.io 
-....
-Username: my-user-name
-Password:
-```
-
-For container registries, the username and password are found by browsing to the resource and clicking on access keys:
 
 ## Jupyter Lab/Notebook Internet Connectivity
 

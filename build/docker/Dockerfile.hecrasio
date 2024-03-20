@@ -1,0 +1,24 @@
+#Start from a core stack version
+FROM  jupyter/base-notebook:2023-01-02
+
+LABEL authors = "Mark Bartlett"
+LABEL maintainer = "bartlett <mbartlett@thewaterinstitute.org>"
+
+#Install hecrasio environment
+ARG conda_env=hecrasio
+ARG py_ver=3.9
+
+COPY --chown=${NB_UID}:${NB_GID} "${conda_env}.yml" "/home/${NB_USER}/tmp/"
+RUN cd "/home/${NB_USER}/tmp/" && \
+     mamba env create -p "${CONDA_DIR}/envs/${conda_env}" -f "${conda_env}.yml" && \
+     mamba clean --all -f -y
+
+RUN "${CONDA_DIR}/envs/${conda_env}/bin/python" -m ipykernel install --user --name="${conda_env}" && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
+
+USER root
+
+RUN chmod -R ugo+rX /home/jovyan
+
+USER $NB_USER
