@@ -2,7 +2,7 @@
 
 
 ## Description
-The respository hecrasio is a collection of tools to read results from HEC-RAS providing quality assurance and control (QA/QC) of one or more notebooks. HEC-RAS input and output is processed and displayed by running the [QA/QC - LWI](https://github.com/user/repo/blob/branch/other_file.md) Jupyter notebook. Running the notebook should be done within a Docker container created with the [Dockerfile-hecrasio](https://github.com/user/repo/blob/branch/other_file.md). The Docker container is created by running the [docker-compose](https://github.com/user/repo/blob/branch/other_file.md) file. Once the docker container is runnning, the Jupyter notebook [QA/QC - LWI](https://github.com/user/repo/blob/branch/other_file.md) is accessed by going to [localhost:8889](ocalhost:8889/lab/tree/jovyan/app/notebooks) and entering the password 'LWI'.
+The respository hecrasio is a collection of tools to read results from HEC-RAS providing quality assurance and control (QA/QC) of one or more notebooks. HEC-RAS input and output is processed and displayed by running the [QA/QC - LWI](https://github.com/waterinstitute/hecrasio/blob/main/notebooks/QAQC-LWI.ipynb) Jupyter notebook. Running the notebook should be done within a Docker container created with the [Dockerfile.hecrasio](https://github.com/waterinstitute/hecrasio/blob/main/build/docker/Dockerfile.hecrasio). The Docker container is created by running the [docker-compose](https://github.com/waterinstitute/hecrasio/blob/main/build/docker/docker-compose.yml) file. Once the docker container is runnning, the Jupyter notebook [QA/QC - LWI](https://github.com/waterinstitute/hecrasio/blob/main/notebooks/QAQC-LWI.ipynb) is accessed by going to [localhost:8889](http://localhost:8889/lab/tree/jovyan/app/notebooks) and entering the password 'LWI'.
 
 
 ## Data
@@ -10,8 +10,6 @@ For using the QA/QC notebook in examining HEC-RAS data, the HEC-RAS HDF should b
 
 ## Project organization
 
-    ├── Makefile           <- Makefile with commands like `make data` or `make train`
-    ├── README.md          <- The top-level README for developers using this project.
     ├── config             <- Configuration files for the project.
     ├── build              <- Files for building environments
     │   ├── docker         <- Docker-compose, Dockerfile, requirements, etc. for the project.
