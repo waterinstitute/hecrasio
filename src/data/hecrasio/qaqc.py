@@ -566,7 +566,7 @@ class DomainResults:
 
     @property
     def Mannings_n(self):
-        """Domain area polygon"""
+        """Manning's n"""
         return self._Mannings_n
     
     @property
