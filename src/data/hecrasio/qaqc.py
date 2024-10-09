@@ -470,6 +470,7 @@ class DomainResults:
         self._Perimeter = get_perimeter()
         self._Faces = get_face()
         self._Extreme_Edges = get_extreme_edge_depths()
+        self._Mannings_n = get_geometry_data('Cells Center Manning\'s n')
 
     @property
     def Percent_Cells_Never_Wet(self):
@@ -563,6 +564,11 @@ class DomainResults:
         """Domain area polygon"""
         return self._Perimeter
 
+    @property
+    def Mannings_n(self):
+        """Domain area polygon"""
+        return self._Mannings_n
+    
     @property
     def Extreme_Edges(self):
         """Perimeter face centroids with absolute, average depths greater than one"""
@@ -1317,3 +1323,39 @@ def create_summary_table(df:pd.core.frame.DataFrame, results_df:pd.core.frame.Da
             else:
                 fancy_report(nbs, values, 'ft/s')
             print("-"*79)
+            
+def check_Mannings_n(model, rasPlan):
+    """
+    Check to ensure that spatially distributed Manning's n values are used
+    
+        Parameters:
+            model: Model
+            rasPlan (HDFResultsFile): HDFResultsFile object
+
+        Returns:
+                status_mannings_n (int): zero for no error, one for error (i.e, const. Manning's n used)
+                error_mesage (str): Error message
+                mannings_summary (pd.DataFrame): Summary of Manning's used in the plans
+    """
+    # Extract all domain results
+    results = {domain: DomainResults(model, rasPlan, domain) for domain in rasPlan.domains}
+    
+    # Estimate the unique values in Manning's n. Sptially varying Manning's n should have atleast 2 unique values
+    len_mannings = {}
+    for domain, result in results.items():
+        len_mannings[domain] = len(set(result.Mannings_n))
+        
+    # Summarize results in a table
+    mannings_summary = pd.DataFrame.from_dict(len_mannings, orient='index').reset_index()
+    mannings_summary.columns = ['Plan', 'Number of unique Manning\'s n values']
+    
+    # Check for errors
+    check = mannings_summary['Number of unique Manning\'s n values'].gt(1).all()
+    if check:
+        error_message = "Spatially varying Manning's n values used"
+    else:
+        error_message = "Potential error! Constant Manning's n values used"
+    
+    status_mannings_n = int(1 - check)
+    
+    return status_mannings_n, error_message, mannings_summary 
